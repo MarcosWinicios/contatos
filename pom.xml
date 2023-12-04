@@ -8,11 +8,11 @@
 		<version>3.2.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.estudos</groupId>
-	<artifactId>contatos</artifactId>
+	<groupId>com.studies</groupId>
+	<artifactId>contacts</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Contatos</name>
-	<description>Aplicação para Grenciamento de contatos</description>
+	<name>Contacts</name>
+	<description>Application for Contact Management</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
