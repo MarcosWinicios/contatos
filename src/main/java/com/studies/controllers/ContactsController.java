@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,14 +16,14 @@ import com.studies.model.Contact;
 @Controller
 public class ContactsController {
 
-	private static final ArrayList<Contact> LISTA_CONTATOS = new ArrayList<>();
+	private static final ArrayList<Contact> CONTACT_LIST = new ArrayList<>();
 
 	static {
-		LISTA_CONTATOS.add(new Contact("1", "Maria", "+55 34 00000 0000"));
-		LISTA_CONTATOS.add(new Contact("2", "João", "+55 34 00000 0000"));
-		LISTA_CONTATOS.add(new Contact("3", "Normandes", "+55 34 00000 0000"));
-		LISTA_CONTATOS.add(new Contact("4", "Thiago", "+55 34 00000 0000"));
-		LISTA_CONTATOS.add(new Contact("5", "Alexandre", "+55 34 00000 0000"));
+		CONTACT_LIST.add(new Contact("1", "Maria", "+55 34 00000 0000"));
+		CONTACT_LIST.add(new Contact("2", "João", "+55 34 00000 0000"));
+		CONTACT_LIST.add(new Contact("3", "Normandes", "+55 34 00000 0000"));
+		CONTACT_LIST.add(new Contact("4", "Thiago", "+55 34 00000 0000"));
+		CONTACT_LIST.add(new Contact("5", "Alexandre", "+55 34 00000 0000"));
 	}
 
 	@GetMapping("/")
@@ -34,7 +35,7 @@ public class ContactsController {
 	public ModelAndView list() {
 		ModelAndView modelAndView = new ModelAndView("list");
 
-		modelAndView.addObject("contacts", LISTA_CONTATOS);
+		modelAndView.addObject("contacts", CONTACT_LIST);
 
 		return modelAndView;
 	}
@@ -51,12 +52,12 @@ public class ContactsController {
 	public String register(Contact contact) {
 		String id = UUID.randomUUID().toString();
 		contact.setId(id);
-		LISTA_CONTATOS.add(contact);
+		CONTACT_LIST.add(contact);
 
 		return "redirect:/contacts";
 	}
 
-	@GetMapping("contacts/{id}/editar")
+	@GetMapping("contacts/{id}/edit")
 	public ModelAndView edit(@PathVariable String id) {
 		ModelAndView modelAndView = new ModelAndView("form");
 
@@ -70,10 +71,18 @@ public class ContactsController {
 	public String update(Contact contact) {
 		Integer index = findContactIndex(contact.getId());
 
-		Contact oldContact = LISTA_CONTATOS.get(index);
-		LISTA_CONTATOS.remove(oldContact);
-		LISTA_CONTATOS.add(index, contact);
+		Contact oldContact = CONTACT_LIST.get(index);
+		CONTACT_LIST.remove(oldContact);
+		CONTACT_LIST.add(index, contact);
 
+		return "redirect:/contacts";
+	}
+	
+	@DeleteMapping("/contacts/{id}")
+	public String delete(@PathVariable String id) {
+		Contact contact = findContact(id);
+		CONTACT_LIST.remove(contact);
+		
 		return "redirect:/contacts";
 	}
 
@@ -83,7 +92,7 @@ public class ContactsController {
 		Integer index = findContactIndex(id);
 
 		if (index != null) {
-			Contact contact = LISTA_CONTATOS.get(index);
+			Contact contact = CONTACT_LIST.get(index);
 			return contact;
 		}
 
@@ -91,8 +100,8 @@ public class ContactsController {
 	}
 
 	private Integer findContactIndex(String id) {
-		for (int i = 0; i < LISTA_CONTATOS.size(); i++) {
-			Contact contact = LISTA_CONTATOS.get(i);
+		for (int i = 0; i < CONTACT_LIST.size(); i++) {
+			Contact contact = CONTACT_LIST.get(i);
 
 			if (contact.getId().equals(id)) {
 				return i;
